@@ -1,7 +1,8 @@
 from enum import Enum
 from htmlnode import *
+
 class TextType(Enum):
-    NORMAL = "normal"
+    TEXT = "text"
     BOLD = "bold"
     ITALIC = "italic"
     CODE = "code"
@@ -25,22 +26,19 @@ class TextNode():
     def __repr__(self):
         return f"TextNode({self.text}, {self.type}, {self.url})"
     
-    def text_node_to_html_node(self):
-        if self.type == TextType[0]:
-            node = LeafNode(None,self.text,None)
-        elif self.type == TextType[1]:
-            node = LeafNode("b",self.text,None)
-        elif self.type == TextType[2]:
-            node = LeafNode("i",self.text,None)
-        elif self.type == TextType[3]:
-            node = LeafNode("code",self.text,None)
-        elif self.type == TextType[4]:
-            node = LeafNode("a",self.text,{"href":self.url})
-        elif self.type == TextType[5]:
-            node = LeafNode("img",None,{"src": self.url, "alt": self.text})
-        else:
-            raise ValueError("wrong text enum")
-        return node
-
-    
+    def text_node_to_html_node(text_node):
+        if text_node.text_type == TextType.TEXT.value:
+            return LeafNode(None, text_node.text)
+        if text_node.text_type == TextType.BOLD.value:
+            return LeafNode("b", text_node.text)
+        if text_node.text_type == TextType.ITALIC.value:
+            return LeafNode("i", text_node.text)
+        if text_node.text_type == TextType.CODE.value:
+            return LeafNode("code", text_node.text)
+        if text_node.text_type == TextType.LINK.value:
+            return LeafNode("a", text_node.text, {"href": text_node.url})
+        if text_node.text_type == TextType.IMAGE.value:
+            return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
+        raise ValueError(f"Invalid text type: {text_node.text_type}")
+            
     
